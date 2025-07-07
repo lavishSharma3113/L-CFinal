@@ -76,8 +76,6 @@ public class NewsArticleServlet extends HttpServlet {
         }
     }
 
-    // ===== Helper Methods =====
-
     private void prepareJsonResponse(HttpServletResponse resp) {
         resp.setContentType(APPLICATION_JSON);
         resp.setCharacterEncoding(UTF_8);
