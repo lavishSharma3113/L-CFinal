@@ -68,7 +68,7 @@ public class NewsCategoryDAO {
                 "SELECT DISTINCT na.category\n" +
                 "FROM news_articles na\n" +
                 "LEFT JOIN NewsCategories nc ON na.category = nc.name\n" +
-                "WHERE nc.category_id IS NULL AND na.category IS NOT NULL;\n";
+                "WHERE nc.category_id IS NULL AND na.category IS NOT NULL";
         try (Connection conn = DBConnectionManager.getConnection();
              PreparedStatement ps = conn.prepareStatement(query)) {
             return ps.executeUpdate() > 0;

@@ -11,6 +11,7 @@ import com.newsaggregator.service.impl.NewsArticleCategoryImpl;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Properties;
 import java.util.Timer;
@@ -35,25 +36,43 @@ public class NewsFetcherScheduler {
                     String serverName = fetcher.getClass().getSimpleName();
                     ExternalServer server = new ExternalServer();
                     server.setName(serverName);
+                    server.setLastAccessed(String.valueOf(LocalDateTime.now()));
 
-                    List<NewsArticle> articles = fetcher.fetchNews();
+                    boolean isActive = false;
                     int savedCount = 0;
 
-                    for (NewsArticle article : articles) {
-                        articleDAO.save(article);
-                        savedCount++;
+                    try {
+                        List<NewsArticle> articles = fetcher.fetchNews();
+
+                        if (articles != null && !articles.isEmpty()) {
+                            for (NewsArticle article : articles) {
+                                articleDAO.save(article);
+                                savedCount++;
+                            }
+
+                            mapCategoryToCategoryId();
+                            isActive = true;
+                        }
+
+                    } catch (Exception e) {
+                        System.err.println("[Scheduler] Failed to fetch news from: " + serverName);
+                        e.printStackTrace();
                     }
-                    mapCategoryToCategoryId();
+
+                    server.setActive(isActive);
                     serverDAO.save(server);
-                    System.out.println("[Scheduler] " + serverName + " saved " + savedCount + " articles at " + new java.util.Date());
                 }
             }
         }, 0, interval);
     }
 
     private void mapCategoryToCategoryId() {
-        categoryService.insertCategoriesInCategoryTable();
-        categoryService.insertNewsCategories();
+        if(categoryService.insertCategoriesInCategoryTable()) {
+            System.out.println("category id added");
+        }
+        if(categoryService.insertNewsCategories()) {
+            System.out.println("category name added");
+        }
     }
 
     private long getFetchInterval() {
