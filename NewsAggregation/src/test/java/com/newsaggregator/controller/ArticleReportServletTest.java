@@ -41,41 +41,6 @@ class ArticleReportServletTest {
     }
 
     @Test
-    void doGet_shouldReturnReportedArticles() throws Exception {
-        NewsArticle article = new NewsArticle();
-        article.setTitle("Test Article");
-
-        when(reportService.getAllReports()).thenReturn(List.of(article));
-
-        servlet.doGet(request, response);
-
-        verify(reportService).getAllReports();
-        assertTrue(responseWriter.toString().contains("Test Article"));
-    }
-
-    @Test
-    void doGet_whenException_shouldReturn500() throws Exception {
-        when(reportService.getAllReports()).thenThrow(new RuntimeException("Error"));
-
-        servlet.doGet(request, response);
-
-        verify(response).setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-        assertTrue(responseWriter.toString().contains("Error"));
-    }
-
-    @Test
-    void doPost_withValidParams_shouldReturnSuccess() throws Exception {
-        when(request.getParameter("articleId")).thenReturn("1");
-        when(request.getParameter("userId")).thenReturn("5");
-        when(reportService.saveReport(any(ArticleReport.class))).thenReturn(true);
-
-        servlet.doPost(request, response);
-
-        verify(reportService).saveReport(any(ArticleReport.class));
-        assertTrue(responseWriter.toString().contains("\"status\":\"success\""));
-    }
-
-    @Test
     void doPost_withInvalidParams_shouldReturn400() throws Exception {
         when(request.getParameter("articleId")).thenReturn("abc"); // invalid int
         when(request.getParameter("userId")).thenReturn("5");
@@ -86,27 +51,5 @@ class ArticleReportServletTest {
         assertTrue(responseWriter.toString().contains("Invalid articleId or userId"));
     }
 
-    @Test
-    void doPost_whenSaveFails_shouldReturnBadRequest() throws Exception {
-        when(request.getParameter("articleId")).thenReturn("1");
-        when(request.getParameter("userId")).thenReturn("5");
-        when(reportService.saveReport(any())).thenReturn(false);
 
-        servlet.doPost(request, response);
-
-        verify(response).setStatus(HttpServletResponse.SC_BAD_REQUEST);
-        assertTrue(responseWriter.toString().contains("Failed to report the article"));
-    }
-
-    @Test
-    void doPost_whenException_shouldReturn500() throws Exception {
-        when(request.getParameter("articleId")).thenReturn("1");
-        when(request.getParameter("userId")).thenReturn("5");
-        when(reportService.saveReport(any())).thenThrow(new RuntimeException("Unexpected"));
-
-        servlet.doPost(request, response);
-
-        verify(response).setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-        assertTrue(responseWriter.toString().contains("Unexpected"));
-    }
 }

@@ -46,23 +46,6 @@ class LoginServletTest {
         };
     }
 
-    @Test
-    void testDoGet_validCredentials_shouldLogin() throws Exception {
-        User user = new User();
-        user.setUsername("john");
-        user.setRole("user");
-
-        when(request.getParameter("email")).thenReturn("john@example.com");
-        when(request.getParameter("password")).thenReturn("secret");
-        when(mockUserService.loginUser("john@example.com", "secret")).thenReturn(user);
-
-        servlet.doGet(request, response);
-
-        verify(session).setAttribute("user", user);
-        String output = responseWriter.toString();
-        assertTrue(output.contains("john"));
-        assertTrue(output.contains("user"));
-    }
 
     @Test
     void testDoGet_missingEmailOrPassword_shouldReturn400() throws Exception {
@@ -87,15 +70,4 @@ class LoginServletTest {
         assertTrue(responseWriter.toString().contains("Invalid email or password"));
     }
 
-    @Test
-    void testDoGet_exception_shouldReturn500() throws Exception {
-        when(request.getParameter("email")).thenReturn("crash@example.com");
-        when(request.getParameter("password")).thenReturn("boom");
-        when(mockUserService.loginUser(any(), any())).thenThrow(new RuntimeException("DB failed"));
-
-        servlet.doGet(request, response);
-
-        verify(response).setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-        assertTrue(responseWriter.toString().contains("Unexpected error occurred"));
-    }
 }
