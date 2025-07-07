@@ -11,6 +11,7 @@ import java.util.List;
 
 public class SavedArticleClient {
     private static final String BASE_URL = "http://localhost:8080/NewsAggregation/saved";
+    private static final String BASE_URL_HISTORY = "http://localhost:8080/NewsAggregation/saveHistory";
     private final Gson gson = new Gson();
 
     public boolean saveArticle(int userId, int articleId) {
@@ -57,6 +58,21 @@ public class SavedArticleClient {
             return response != null && response.contains("success");
         } catch (Exception e) {
             System.err.println("Error deleting article: " + e.getMessage());
+            return false;
+        }
+    }
+
+    public boolean saveUserArticleHistory(int userId, int articleId) {
+        try {
+            URL url = new URL(BASE_URL_HISTORY + "?articleId=" + articleId + "&userId=" + userId);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("POST");
+
+            BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+            String json = in.readLine();
+            return json.contains("\"success\"");
+        } catch (Exception e) {
+            System.err.println("Error saving article: " + e.getMessage());
             return false;
         }
     }

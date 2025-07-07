@@ -8,8 +8,9 @@ public class NewsArticle {
     private String category;
     private String url;
     private String publishedAt;
+    private int categoryId;
 
-    // Getters and Setters
+
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
 
@@ -30,4 +31,9 @@ public class NewsArticle {
 
     public String getPublishedAt() { return publishedAt; }
     public void setPublishedAt(String publishedAt) { this.publishedAt = publishedAt; }
+
+    public void setCategoryId(int categoryId) {
+        this.categoryId = categoryId;
+    }
+    public int getCategoryId() { return categoryId; }
 }

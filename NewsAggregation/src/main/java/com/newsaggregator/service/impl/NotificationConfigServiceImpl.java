@@ -16,5 +16,9 @@ public class NotificationConfigServiceImpl implements INotificationConfigService
     public List<NotificationConfig> getConfigsByUser(int userId) {
         return dao.getConfigsByUser(userId);
     }
+
+    public boolean insertUserKeyword(int userId,String keyword) {
+        return dao.insertUserKeyword(userId,keyword);
+    }
 }
 

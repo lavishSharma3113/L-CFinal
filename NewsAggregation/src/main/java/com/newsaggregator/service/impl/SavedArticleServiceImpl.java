@@ -21,4 +21,8 @@ public class SavedArticleServiceImpl implements ISavedArticleService {
     public boolean removeSavedArticle(int userId, int articleId) {
         return dao.delete(userId, articleId);
     }
+
+    public boolean saveUserArticleHistory(int userId , int articleId) {
+        return dao.saveUserArticleHistory(userId , articleId);
+    }
 }

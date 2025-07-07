@@ -59,7 +59,6 @@ public class AuthClient {
                 json.append(line);
             }
 
-            // Parse JSON
             Gson gson = new Gson();
             Map<String, String> responseMap = gson.fromJson(json.toString(), Map.class);
             return "success".equalsIgnoreCase(responseMap.get("status"));

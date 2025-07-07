@@ -1,6 +1,7 @@
 package com.newsaggregator.service.impl;
 
 import com.newsaggregator.dao.NotificationDAO;
+import com.newsaggregator.model.NewsArticle;
 import com.newsaggregator.model.Notification;
 import com.newsaggregator.service.INotificationService;
 
@@ -13,11 +14,12 @@ public class NotificationServiceImpl implements INotificationService {
         return dao.save(notification);
     }
 
-    public List<Notification> getUserNotifications(int userId) {
+    public List<NewsArticle> getUserNotifications(int userId) {
         return dao.getByUser(userId);
     }
 
-    public boolean markNotificationRead(int id) {
-        return dao.markAsRead(id);
+    public boolean updateLastNotificationSeen(int userId) {
+        return dao.updateLastNotificationSeen(userId);
     }
+
 }

@@ -5,6 +5,15 @@ public class NotificationConfig {
     private int userId;
     private int categoryId;
     private boolean enabled;
+    private String categoryName;
+
+    public String getCategoryName() {
+        return categoryName;
+    }
+
+    public void setCategoryName(String categoryName) {
+        this.categoryName = categoryName;
+    }
 
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }

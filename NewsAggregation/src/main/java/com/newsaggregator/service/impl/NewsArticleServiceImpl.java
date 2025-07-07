@@ -1,6 +1,7 @@
 package com.newsaggregator.service.impl;
 import com.newsaggregator.dao.NewsArticleDAO;
 import com.newsaggregator.model.NewsArticle;
+import com.newsaggregator.model.NewsCategory;
 import com.newsaggregator.service.INewsArticleService;
 
 import java.util.List;
@@ -14,8 +15,8 @@ public class NewsArticleServiceImpl implements INewsArticleService {
     }
 
     @Override
-    public List<NewsArticle> getAllArticles() {
-        return dao.findAll();
+    public List<NewsArticle> getAllArticles(String start , String end, int userId) {
+        return dao.findAll(start ,end, userId);
     }
 
     @Override
@@ -24,12 +25,19 @@ public class NewsArticleServiceImpl implements INewsArticleService {
     }
 
     @Override
-    public List<NewsArticle> getArticlesByToday() {
-        return dao.findToday();
+    public List<NewsArticle> getArticlesByToday(int userId) {
+        return dao.findToday(userId);
     }
 
     @Override
     public List<NewsArticle> getArticlesByKeyword(String keyword) {
         return dao.findByKeyword(keyword);
     }
+
+    @Override
+    public List<NewsArticle> findMostLiked() {
+        return dao.findMostLiked();
+    }
+
+
 }

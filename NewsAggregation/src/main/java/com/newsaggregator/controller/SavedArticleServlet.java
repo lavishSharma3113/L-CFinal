@@ -19,7 +19,7 @@ public class SavedArticleServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         int articleId = Integer.parseInt(request.getParameter("articleId"));
-        int userId = Integer.parseInt(request.getParameter("userId")); // Now passed directly
+        int userId = Integer.parseInt(request.getParameter("userId"));
 
         SavedArticle saved = new SavedArticle();
         saved.setUserId(userId);

@@ -5,6 +5,8 @@ import com.newsaggregator.dao.impl.UserDAOImpl;
 import com.newsaggregator.model.User;
 import com.newsaggregator.service.IUserService;
 
+import java.util.List;
+
 public class UserServiceImpl implements IUserService {
     private final IUserDAO userDAO = new UserDAOImpl();
 
@@ -17,12 +19,17 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
-    public boolean loginUser(String email, String password) {
+    public User loginUser(String email, String password) {
         return userDAO.validateLogin(email, password);
     }
 
     @Override
     public User getUser(String email) {
         return userDAO.getUserByEmail(email);
+    }
+
+    @Override
+    public List<User> getSubscribedUsers() {
+        return userDAO.getSubscribedUsers();
     }
 }

@@ -31,6 +31,7 @@ public class SavedArticleDAO {
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 NewsArticle article = new NewsArticle();
+                article.setId(rs.getInt("id"));
                 article.setTitle(rs.getString("title"));
                 article.setContent(rs.getString("content"));
                 article.setSource(rs.getString("source"));
@@ -47,6 +48,19 @@ public class SavedArticleDAO {
 
     public boolean delete(int userId, int articleId) {
         String sql = "DELETE FROM saved_articles WHERE user_id = ? AND article_id = ?";
+        try (Connection conn = DBConnectionManager.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, userId);
+            ps.setInt(2, articleId);
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean saveUserArticleHistory(int userId , int articleId) {
+        String sql = "INSERT INTO article_reads (user_id, article_id) VALUES (?, ?)";
         try (Connection conn = DBConnectionManager.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, userId);

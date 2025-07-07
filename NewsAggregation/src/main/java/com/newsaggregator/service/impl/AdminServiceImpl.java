@@ -25,5 +25,17 @@ public class AdminServiceImpl implements IAdminService {
     public boolean addNewsCategory(NewsCategory category) {
         return dao.addNewsCategory(category);
     }
+
+    public boolean hideArticle(int articleId) {
+        return dao.hideArticle(articleId);
+    }
+
+    public boolean hideArticle(String keyword) {
+        return dao.hideArticle(keyword);
+    }
+
+    public boolean hideCategory(int categoryId, boolean isHidden) {
+        return dao.hideCategory(categoryId, isHidden);
+    }
 }
 

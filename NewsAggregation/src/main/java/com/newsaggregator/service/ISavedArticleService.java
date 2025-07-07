@@ -9,4 +9,5 @@ public interface ISavedArticleService {
     boolean saveArticle(SavedArticle saved);
     List<NewsArticle> getSavedByUser(int userId);
     boolean removeSavedArticle(int userId, int articleId);
+    boolean saveUserArticleHistory(int userId , int articleId);
 }

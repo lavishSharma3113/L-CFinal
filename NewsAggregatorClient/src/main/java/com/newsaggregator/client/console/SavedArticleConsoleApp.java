@@ -1,7 +1,5 @@
 package com.newsaggregator.client.console;
 
-
-
 import com.newsaggregator.client.model.NewsArticle;
 import com.newsaggregator.client.service.SavedArticleClient;
 
@@ -13,32 +11,49 @@ public class SavedArticleConsoleApp {
     private final Scanner scanner = new Scanner(System.in);
 
     public void showSavedArticles(int userId) {
-        List<NewsArticle> saved = client.getSavedArticles(userId);
-        if (saved.isEmpty()) {
+        List<NewsArticle> savedArticles = client.getSavedArticles(userId);
+
+        if (savedArticles == null || savedArticles.isEmpty()) {
             System.out.println("No saved articles found.");
             return;
         }
 
-        System.out.println("Your Saved Articles:");
-        for (int i = 0; i < saved.size(); i++) {
-            NewsArticle a = saved.get(i);
-            System.out.println((i + 1) + ". " + a.getTitle());
-            System.out.println("   Source: " + a.getSource());
-            System.out.println("   Date: " + a.getPublishedAt());
-            System.out.println("   URL: " + a.getUrl());
-        }
+        printSavedArticles(savedArticles);
 
-        System.out.print("\nEnter article number to delete (0 to skip): ");
-        int choice = Integer.parseInt(scanner.nextLine());
-        if (choice > 0 && choice <= saved.size()) {
-            int articleId = saved.get(choice - 1).getId();
-            boolean deleted = client.deleteSavedArticle(userId, articleId);
-            if (deleted) {
-                System.out.println("Article removed.");
-            } else {
-                System.out.println("Could not remove article.");
-            }
+        int choice = readInt("\nEnter article number to delete (0 to skip): ");
+        if (choice == 0) return;
+
+        if (choice > 0 && choice <= savedArticles.size()) {
+            NewsArticle selected = savedArticles.get(choice - 1);
+            deleteSavedArticle(userId, selected.getId());
+        } else {
+            System.out.println("Invalid selection.");
+        }
+    }
+
+    private void printSavedArticles(List<NewsArticle> articles) {
+        System.out.println("=== Your Saved Articles ===");
+        for (int i = 0; i < articles.size(); i++) {
+            NewsArticle article = articles.get(i);
+            System.out.printf("%d. %s%n", i + 1, article.getTitle());
+            System.out.println("   Source: " + article.getSource());
+            System.out.println("   Date: " + article.getPublishedAt());
+            System.out.println("   URL: " + article.getUrl());
+        }
+    }
+
+    private void deleteSavedArticle(int userId, int articleId) {
+        boolean success = client.deleteSavedArticle(userId, articleId);
+        System.out.println(success ? "Article removed." : "Could not remove article.");
+    }
+
+    private int readInt(String prompt) {
+        System.out.print(prompt);
+        try {
+            return Integer.parseInt(scanner.nextLine());
+        } catch (NumberFormatException ex) {
+            System.out.println("Invalid input. Please enter a number.");
+            return readInt(prompt);
         }
     }
 }
-

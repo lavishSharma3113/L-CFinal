@@ -6,6 +6,8 @@ import com.newsaggregator.model.User;
 import com.newsaggregator.utils.DBConnectionManager;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class UserDAOImpl implements IUserDAO {
     @Override
@@ -44,18 +46,51 @@ public class UserDAOImpl implements IUserDAO {
             throw new DatabaseOperationException(e.getMessage());
         }
     }
-
     @Override
-    public boolean validateLogin(String email, String password) {
+    public User validateLogin(String email, String password) {
         try (Connection conn = DBConnectionManager.getConnection()) {
             String sql = "SELECT * FROM users WHERE email=? AND password_hash=?";
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setString(1, email);
             ps.setString(2, password);
             ResultSet rs = ps.executeQuery();
-            return rs.next();
+
+            if (rs.next()) {
+                User user = new User();
+                user.setId(rs.getInt("user_id"));
+                user.setUsername(rs.getString("username"));
+                user.setEmail(rs.getString("email"));
+                user.setRole(rs.getString("role"));
+                user.setLastNotificationTime(rs.getString("last_notification_seen"));
+                return user;
+            }
+            return null;
         } catch (SQLException e) {
-            throw new DatabaseOperationException(e.getMessage());
+            throw new DatabaseOperationException("Error validating login: " + e.getMessage());
         }
     }
+
+    public List<User> getSubscribedUsers() {
+        List<User> users = new ArrayList<>();
+        try (Connection conn = DBConnectionManager.getConnection()) {
+            String sql = "SELECT * FROM users";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                User user = new User();
+                user.setId(rs.getInt("user_id"));
+                user.setUsername(rs.getString("username"));
+                user.setEmail(rs.getString("email"));
+                user.setRole(rs.getString("role"));
+                user.setLastNotificationTime(rs.getString("last_notification_seen"));
+                users.add(user);
+            }
+
+        } catch (SQLException e) {
+            throw new DatabaseOperationException("Error validating login: " + e.getMessage());
+        }
+        return users;
+    }
+
 }

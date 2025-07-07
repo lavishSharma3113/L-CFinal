@@ -6,6 +6,7 @@ public class User {
     private String email;
     private String password_hash;
     private String role;
+    private String lastNotificationTime;
 
     // Getters and Setters
     public int getId() { return user_id; }
@@ -22,4 +23,7 @@ public class User {
 
     public String getRole() { return role; }
     public void setRole(String role) { this.role = role; }
+
+    public String getLastNotificationTime() {return lastNotificationTime;}
+    public void setLastNotificationTime(String lastTime){ this.lastNotificationTime = lastTime;}
 }

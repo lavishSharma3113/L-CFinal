@@ -10,5 +10,8 @@ public interface IAdminService {
     ExternalServer getExternalServerById(int id);
     boolean updateExternalServer(ExternalServer server);
     boolean addNewsCategory(NewsCategory category);
+    boolean hideArticle(int articleId);
+    boolean hideArticle(String keyword);
+    boolean hideCategory(int categoryId, boolean isHidden);
 }
 

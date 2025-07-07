@@ -19,11 +19,30 @@ public class NotificationConfigServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         int userId = Integer.parseInt(request.getParameter("userId"));
         List<NotificationConfig> configs = service.getConfigsByUser(userId);
+
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+
+        PrintWriter out = response.getWriter();
+        out.print(new com.google.gson.Gson().toJson(configs));
+        out.flush();
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        PrintWriter out = response.getWriter();
+
         int userId = Integer.parseInt(request.getParameter("userId"));
+        String keyword = request.getParameter("keyword");
+        if (keyword != null && !keyword.trim().isEmpty()) {
+            boolean success = service.insertUserKeyword(userId, keyword);
+            out.print("{\"success\": " + success + ", \"action\": \"insertKeyword\"}");
+            out.flush();
+            return;
+        }
+
         int categoryId = Integer.parseInt(request.getParameter("categoryId"));
         boolean isEnabled = Boolean.parseBoolean(request.getParameter("enabled"));
 
@@ -33,7 +52,9 @@ public class NotificationConfigServlet extends HttpServlet {
         config.setEnabled(isEnabled);
 
         boolean success = service.update(config);
-
+        out.print("{\"success\": " + success + ", \"action\": \"updateConfig\"}");
+        out.flush();
     }
+
 }
 
