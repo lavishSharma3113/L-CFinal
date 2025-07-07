@@ -81,7 +81,7 @@ public class NewsArticleDAO {
 
     public List<NewsArticle> findToday(int userId) {
         String sql = "SELECT na.* FROM news_articles na JOIN NewsCategories nc ON na.category_id = nc.category_id WHERE na.is_hidden = FALSE AND nc.is_hidden = FALSE AND DATE(na.created_at) = CURDATE() ORDER BY na.published_at DESC";
-        Map<Integer, NewsArticle> articleMap = new LinkedHashMap<>();
+        Map<Integer, NewsArticle> articleMap = new HashMap<>();
 
         try (Connection conn = DBConnectionManager.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql);

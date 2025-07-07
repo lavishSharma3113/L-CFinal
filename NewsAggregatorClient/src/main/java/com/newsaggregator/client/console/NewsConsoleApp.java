@@ -1,6 +1,7 @@
 package com.newsaggregator.client.console;
 
 import com.newsaggregator.client.model.NewsArticle;
+import com.newsaggregator.client.model.NewsCategory;
 import com.newsaggregator.client.service.ArticleReactionClient;
 import com.newsaggregator.client.service.NewsClient;
 import com.newsaggregator.client.service.NewsReportClient;
@@ -40,22 +41,19 @@ public class NewsConsoleApp {
         String start = readLine("Enter start date (YYYY-MM-DD): ");
         String end = readLine("Enter end date (YYYY-MM-DD): ");
 
+        List<NewsCategory> categories = newsClient.getAllNewsCategories();
+
         System.out.println("\nChoose Category:");
-        System.out.println("1. All");
-        System.out.println("2. Business");
-        System.out.println("3. Entertainment");
-        System.out.println("4. Sports");
-        System.out.println("5. Technology");
+        for(int i=0 ; i<categories.size(); i++) {
+            System.out.println(i+1 +" "+categories.get(i).getName());
+        }
+//        System.out.println("2. Business");
+//        System.out.println("3. Entertainment");
+//        System.out.println("4. Sports");
+//        System.out.println("5. Technology");
         int categoryOption = readInt("Enter number: ");
 
-        String category = switch (categoryOption) {
-            case 1 -> "all";
-            case 2 -> "business";
-            case 3 -> "entertainment";
-            case 4 -> "sports";
-            case 5 -> "technology";
-            default -> "";
-        };
+        String category = categories.get(categoryOption-1).getName();
 
         List<NewsArticle> articles = category.equals("all")
                 ? newsClient.searchAllCategoryNews(start, end, userId)
@@ -156,7 +154,6 @@ public class NewsConsoleApp {
         System.out.println(reported ? "Article reported." : "Failed to report or already reported.");
     }
 
-    // Input Utility Methods
     private int readInt(String prompt) {
         System.out.print(prompt);
         try {

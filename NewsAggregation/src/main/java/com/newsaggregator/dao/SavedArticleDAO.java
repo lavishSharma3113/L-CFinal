@@ -3,12 +3,14 @@ package com.newsaggregator.dao;
 import com.newsaggregator.model.NewsArticle;
 import com.newsaggregator.model.SavedArticle;
 import com.newsaggregator.utils.DBConnectionManager;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class SavedArticleDAO {
+    private static final Logger logger = LoggerFactory.getLogger(SavedArticleDAO.class);
     public boolean save(SavedArticle saved) {
         String sql = "INSERT INTO saved_articles (user_id, article_id) VALUES (?, ?)";
         try (Connection conn = DBConnectionManager.getConnection();
@@ -18,6 +20,7 @@ public class SavedArticleDAO {
             return ps.executeUpdate() > 0;
         } catch (SQLException e) {
             e.printStackTrace();
+            logger.error("Error in saving article", e);
             return false;
         }
     }
@@ -42,6 +45,7 @@ public class SavedArticleDAO {
             }
         } catch (SQLException e) {
             e.printStackTrace();
+            logger.error("Error in getting saved articles", e);
         }
         return articles;
     }
@@ -55,6 +59,7 @@ public class SavedArticleDAO {
             return ps.executeUpdate() > 0;
         } catch (SQLException e) {
             e.printStackTrace();
+            logger.error("Error in deleting the saved articles", e);
             return false;
         }
     }
@@ -68,6 +73,7 @@ public class SavedArticleDAO {
             return ps.executeUpdate() > 0;
         } catch (SQLException e) {
             e.printStackTrace();
+            logger.error("Error in saving user history", e);
             return false;
         }
     }

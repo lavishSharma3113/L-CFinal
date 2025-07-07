@@ -10,8 +10,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class NewsCategoryDAO {
+    private static final Logger logger = LoggerFactory.getLogger(NewsCategoryDAO.class);
 
     public List<NewsCategory> getAllNewsCategories() {
         List<NewsCategory> categories = new ArrayList<>();
@@ -31,6 +34,7 @@ public class NewsCategoryDAO {
 
         } catch (SQLException e) {
             e.printStackTrace();
+            logger.error("Error in fetching the categories", e);
         }
 
         return categories;
@@ -45,6 +49,7 @@ public class NewsCategoryDAO {
             return ps.executeUpdate() > 0;
         } catch (SQLException e) {
             e.printStackTrace();
+            logger.error("Error in hiding the category", e);
             return false;
         }
     }
@@ -59,6 +64,7 @@ public class NewsCategoryDAO {
             return ps.executeUpdate() > 0;
         } catch (SQLException e) {
             e.printStackTrace();
+            logger.error("Error in inserting news Category", e);
             return false;
         }
     }
@@ -74,6 +80,7 @@ public class NewsCategoryDAO {
             return ps.executeUpdate() > 0;
         } catch (SQLException e) {
             e.printStackTrace();
+            logger.error("Error in inserting category to table", e);
             return false;
         }
     }

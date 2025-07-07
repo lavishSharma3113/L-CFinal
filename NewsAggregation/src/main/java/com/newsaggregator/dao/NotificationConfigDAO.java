@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class NotificationConfigDAO {
-    private static final Logger logger = LoggerFactory.getLogger(NotificationDAO.class);
+    private static final Logger logger = LoggerFactory.getLogger(NotificationConfigDAO.class);
     public boolean saveOrUpdate(NotificationConfig config) {
         String sql = "REPLACE INTO notification_config (user_id, category_id, is_enabled) VALUES (?, ?, ?)";
         try (Connection conn = DBConnectionManager.getConnection();
